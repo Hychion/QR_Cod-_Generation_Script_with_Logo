@@ -2,7 +2,7 @@ import qrcode
 from PIL import Image
 
 
-def generation_qrCode():
+def generation_qrCode(data):
     """
     Generate a QR code image from the provided data.
 
@@ -51,7 +51,8 @@ def supression_fond(qr_img):
         else:
             new_datas.append(item)
 
-    return qr_img.putdata(new_datas)
+    qr_img.putdata(new_datas)
+    return qr_img
 
 
 def placement_logo_in_Qr(logo, qr_img, logo_size:int, qr_box :tuple):
@@ -79,7 +80,7 @@ def generate_qrcode_with_logo(data, logo_path, output_path):
     :return:
     """
     # Générer le QR code
-    qr_img = generation_qrCode()
+    qr_img = generation_qrCode(data)
 
     # Ouvrir le logo
     logo = Image.open(logo_path)
@@ -94,17 +95,16 @@ def generate_qrcode_with_logo(data, logo_path, output_path):
     logo, logo_size, qr_box = dimentionnement_logo(qr_img, logo)
 
     # Coller le logo au centre du QR code
-
     qr_img = placement_logo_in_Qr(logo, qr_img, logo_size, qr_box)
 
-    # qr_img = supression_fond(qr_img)
+    # Supprimer le fond du QR code
+    qr_img = supression_fond(qr_img)
 
     # Enregistrer le résultat
     qr_img.save(output_path)
 
-
 if __name__ == "__main__":
-    data = "https://www.linkedin.com/in/quentin-libert-1596a2214/"
+    data = "https://www.root-me.org/Hychion_"
     logo_path = "img_3.png"
     output_path = "new_qrcode.png"
     generate_qrcode_with_logo(data, logo_path, output_path)
